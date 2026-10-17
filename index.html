@@ -1,85 +1,104 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tạo Báo Lá Cải</title>
-    <!-- Nhúng font chữ cho kiểu báo -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lora:ital,wght@0,400;1,400&family=Oswald:wght@400;700&display=swap"
-        rel="stylesheet">
+    <title>Tạo Thông Báo Virus Giả</title>
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
-
 <body>
+
     <div class="app-container">
-        <!-- Khu vực nhập liệu -->
-        <aside class="input-panel">
-            <h2>✍️ Tạo Báo Của Bạn</h2>
-            <div class="form-group">
-                <label for="newspaper-name">Tên tờ báo</label>
-                <input type="text" id="newspaper-name" placeholder="VD: Báo Lá Cải Hư Cấu" value="Báo Lá Cải Hư Cấu"
-                    list="safe-newspaper-names" autocomplete="off">
-                <!-- Gợi ý tên hư cấu, tránh trùng báo thật -->
-                <datalist id="safe-newspaper-names">
-                    <option value="Báo Lá Cải Hư Cấu"></option>
-                    <option value="Tin Vịt Hằng Ngày"></option>
-                    <option value="Nhật Báo Xàm Xí"></option>
-                    <option value="Thời Báo Hầm Cầu"></option>
-                    <option value="Báo Đồn Đại 24/7"></option>
-                    <option value="Tin Sốt Dẻo Không Thật"></option>
-                    <option value="Báo Giật Tít Hư Cấu"></option>
-                    <option value="Cái Loa Phường Hư Cấu"></option>
-                </datalist>
-                <small class="hint hint-warn">
-                    ⚠️ Chỉ dùng cho mục đích châm biếm/hư cấu. Vui lòng không dùng tên báo thật đang hoạt động.
-                </small>
-            </div>
-            <div class="form-group">
-                <label for="article-date">Ngày tháng</label>
-                <input type="text" id="article-date" placeholder="VD: Thứ Sáu, 25/09/2026" value="Thứ Sáu, 25/09/2026">
-            </div>
-            <div class="form-group">
-                <label for="headline">Tiêu đề chính</label>
-                <input type="text" id="headline" placeholder="Nhập tiêu đề giật gân..."
-                    value="PHÁT HIỆN SỰ THẬT GÂY SỐC VỀ...">
-            </div>
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <h2>Cấu hình thông báo</h2>
+            
+            <label for="inputFileName">Tên File:</label>
+            <input type="text" id="inputFileName" value="explorer.exe" placeholder="Nhập tên file...">
 
-            <!-- ===== Ô UPLOAD ẢNH MỚI ===== -->
-            <div class="form-group">
-                <label for="image-upload">🖼️ Ảnh minh họa (không bắt buộc)</label>
-                <input type="file" id="image-upload" accept="image/*">
-                <div class="image-preview-wrapper" id="image-preview-wrapper">
-                    <img id="image-preview" alt="Xem trước ảnh" />
-                    <button type="button" id="remove-image-btn" title="Xóa ảnh">✕</button>
+            <label for="inputLogo">Chữ Logo (Tối đa 4 ký tự):</label>
+            <input type="text" id="inputLogo" value="SJAV" maxlength="4" placeholder="Nhập logo...">
+
+            <label for="inputYear">Năm:</label>
+            <input type="text" id="inputYear" value="2006" maxlength="4" placeholder="Nhập năm...">
+
+            <label for="inputVersion">Phiên bản:</label>
+            <input type="text" id="inputVersion" value="Fakefessional" placeholder="Nhập phiên bản...">
+
+            <label for="inputAlertTitle">Tiêu đề cảnh báo:</label>
+            <input type="text" id="inputAlertTitle" value="Virus Alert !" placeholder="Nhập tiêu đề...">
+
+            <label for="inputMessage">Nội dung chi tiết:</label>
+            <textarea id="inputMessage" rows="3" placeholder="Nhập nội dung...">File này có thể bị nhiễm virus, SJAV đã xử lý xong.</textarea>
+
+            <button id="btnCloseAlert" class="control-btn">Ẩn/hiện thông báo</button>
+            <!-- Nút tải ảnh -->
+            <button id="btnDownload" class="control-btn download-btn">Tải ảnh về</button>
+        </div>
+
+        <!-- Preview Area -->
+        <div class="preview-area">
+            <div class="fake-alert" id="fakeAlert">
+                <!-- Title Bar -->
+                <div class="title-bar">
+                    <div class="title-text">
+                        <span class="icon">⚠️</span> <span id="alertTitleText">Virus Alert !</span>
+                    </div>
+                    <button class="close-btn" id="closeBtn">X</button>
                 </div>
-                <small class="hint">Ảnh chỉ xử lý trên trình duyệt, không tải lên server.</small>
-            </div>
 
-            <div class="form-group">
-                <label for="article-content">Nội dung bài báo</label>
-                <textarea id="article-content" rows="8"
-                    placeholder="Nhập nội dung...">Trong một diễn biến mới nhất, các nhà điều tra đã phát hiện ra một sự thật động trời. Các nhân chứng cho biết họ không thể tin vào mắt mình khi chứng kiến sự việc. Hiện cơ quan có liên quan đang tiến hành điều tra làm rõ.</textarea>
-            </div>
-            <button id="generate-btn" class="btn-primary">📰 Tạo Báo</button>
-            <button id="download-btn" class="btn-secondary" disabled>⬇️ Tải Ảnh Về</button>
-        </aside>
+                <!-- Alert Body -->
+                <div class="alert-body">
+                    <!-- Left Vertical Banner -->
+                    <div class="left-banner">
+                        <div class="banner-grid">
+                            <!-- SJAV chiếm trọn cột bên trái (2 hàng) -->
+                            <div class="cell brand-sjav" id="previewLogo">SJAV</div>
+                            <!-- Ô chứa số 2006 -->
+                            <div class="cell brand-year" id="previewYear">2006</div>
+                            <!-- Ô chứa chữ Fakefessional -->
+                            <div class="cell brand-prof" id="previewVersion">Fakefessional</div>
+                        </div>
+                    </div>
 
-        <!-- Khu vực xem trước -->
-        <main class="preview-panel">
-            <h2>📸 Xem Trước</h2>
-            <div id="newspaper-preview" class="newspaper">
-                <!-- Nội dung báo sẽ được tạo ở đây bằng JavaScript -->
+                    <!-- Main Content -->
+                    <div class="content">
+                        <!-- Bugs Row -->
+                        <div class="bugs-container">
+                            <svg viewBox="0 0 100 100" class="bug-icon"><path d="M50 20 L50 80 M50 50 L20 30 M50 50 L80 30 M50 60 L25 80 M50 60 L75 80" stroke="#000" stroke-width="6" stroke-linecap="round"/><ellipse cx="50" cy="50" rx="25" ry="30" fill="#4169E1" stroke="#000" stroke-width="4"/><circle cx="35" cy="30" r="4" fill="#fff"/><circle cx="65" cy="30" r="4" fill="#fff"/><circle cx="35" cy="30" r="2" fill="#000"/><circle cx="65" cy="30" r="2" fill="#000"/></svg>
+                            <svg viewBox="0 0 100 100" class="bug-icon"><path d="M50 20 L50 80 M50 50 L20 30 M50 50 L80 30 M50 60 L25 80 M50 60 L75 80" stroke="#000" stroke-width="6" stroke-linecap="round"/><ellipse cx="50" cy="50" rx="25" ry="30" fill="#4169E1" stroke="#000" stroke-width="4"/><circle cx="35" cy="30" r="4" fill="#fff"/><circle cx="65" cy="30" r="4" fill="#fff"/><circle cx="35" cy="30" r="2" fill="#000"/><circle cx="65" cy="30" r="2" fill="#000"/></svg>
+                            <svg viewBox="0 0 100 100" class="bug-icon"><path d="M50 20 L50 80 M50 50 L20 30 M50 50 L80 30 M50 60 L25 80 M50 60 L75 80" stroke="#000" stroke-width="6" stroke-linecap="round"/><ellipse cx="50" cy="50" rx="25" ry="30" fill="#4169E1" stroke="#000" stroke-width="4"/><circle cx="35" cy="30" r="4" fill="#fff"/><circle cx="65" cy="30" r="4" fill="#fff"/><circle cx="35" cy="30" r="2" fill="#000"/><circle cx="65" cy="30" r="2" fill="#000"/></svg>
+                            <svg viewBox="0 0 100 100" class="bug-icon"><path d="M50 20 L50 80 M50 50 L20 30 M50 50 L80 30 M50 60 L25 80 M50 60 L75 80" stroke="#000" stroke-width="6" stroke-linecap="round"/><ellipse cx="50" cy="50" rx="25" ry="30" fill="#4169E1" stroke="#000" stroke-width="4"/><circle cx="35" cy="30" r="4" fill="#fff"/><circle cx="65" cy="30" r="4" fill="#fff"/><circle cx="35" cy="30" r="2" fill="#000"/><circle cx="65" cy="30" r="2" fill="#000"/></svg>
+                            <svg viewBox="0 0 100 100" class="bug-icon"><path d="M50 20 L50 80 M50 50 L20 30 M50 50 L80 30 M50 60 L25 80 M50 60 L75 80" stroke="#000" stroke-width="6" stroke-linecap="round"/><ellipse cx="50" cy="50" rx="25" ry="30" fill="#4169E1" stroke="#000" stroke-width="4"/><circle cx="35" cy="30" r="4" fill="#fff"/><circle cx="65" cy="30" r="4" fill="#fff"/><circle cx="35" cy="30" r="2" fill="#000"/><circle cx="65" cy="30" r="2" fill="#000"/></svg>
+                        </div>
+
+                        <!-- Texts -->
+                        <div class="text-group">
+                            <p class="alert-title" id="previewAlertTitle">Virus Alert !</p>
+                            <p class="file-info">File: <span id="previewFileName">explorer.exe</span></p>
+                            <p class="message-info" id="previewMessage">File này có thể bị nhiễm virus, SJAV đã xử lý xong.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer / Button Area -->
+                <div class="alert-footer">
+                    <div class="status-text">&gt;&gt; Đã xử lý xong !</div>
+                    <button class="next-btn">Tiếp &gt;&gt;</button>
+                </div>
+
+                <!-- Watermark -->
+                <div class="watermark">
+                    Ảnh fake được tạo tại www.sieu.io.vn/j4f/fake-virus-alert<br>
+                    Tên phần mềm là không có thật, không có tính pháp lý.<br>
+                    Người dùng tự chịu trách nhiệm khi tạo và dùng ảnh này.
+                </div>
             </div>
-        </main>
+        </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="script.js"></script>
 </body>
-
 </html>
